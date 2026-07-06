@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Just Fitness — No Excuses. Just Results.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,wght@0,200;0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --white:#FAFAF8;
+  --off:#F0EDE6;
+  --off2:#E5E0D5;
+  --ink:#0E0E0E;
+  --ink-mid:#1C1C1C;
+  --ink-soft:#333;
+  --lime:#C8F135;
+  --lime-d:#A8D015;
+  --lime-glow:rgba(200,241,53,0.3);
+  --grey:#7A7A72;
+  --grey-l:#AEADA6;
+  --anton:'Anton',sans-serif;
+  --dm:'DM Sans',sans-serif;
+  --serif:'DM Serif Display',serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--dm);
+  background:var(--white);
+  color:var(--ink);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ═══════════════════════════════════
+   CURSOR
+═══════════════════════════════════ */
+#cur{
+  width:12px;height:12px;background:var(--lime);
+  border-radius:50%;position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,width 0.25s,height 0.25s,border-radius 0.25s;
+  mix-blend-mode:multiply;
+}
+#cur-r{
+  width:40px;height:40px;border:1.5px solid rgba(14,14,14,0.2);
+  border-radius:50%;position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width 0.3s,height 0.3s,border-color 0.3s;
+}
+#cur.on{width:48px;height:48px;border-radius:4px;background:var(--lime);opacity:0.5}
+#cur-r.on{width:0;height:0;opacity:0}
+
+/* ═══════════════════════════════════
+   NAV
+═══════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.5rem 4rem;
+  transition:background 0.4s,border-color 0.4s,padding 0.4s;
+  border-bottom:1px solid transparent;
+}
+nav.sc{
+  background:rgba(250,250,248,0.95);
+  backdrop-filter:blur(20px);
+  border-color:rgba(14,14,14,0.08);
+  padding:1rem 4rem;
+}
+.nav-logo{
+  text-decoration:none;
+  font-family:var(--anton);
+  font-size:1.6rem;letter-spacing:0.06em;
+  color:var(--ink);display:flex;align-items:flex-end;gap:6px;
+}
+.nav-logo .dot{
+  width:8px;height:8px;background:var(--lime);
+  border-radius:50%;margin-bottom:5px;flex-shrink:0;
+}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{
+  font-family:var(--dm);font-size:0.8rem;font-weight:400;
+  letter-spacing:0.05em;color:var(--grey);text-decoration:none;
+  transition:color 0.3s;
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{
+  font-family:var(--dm);font-size:0.78rem;font-weight:500;
+  letter-spacing:0.08em;background:var(--ink);color:var(--white);
+  padding:0.65rem 1.6rem;text-decoration:none;border-radius:2px;
+  transition:background 0.3s,transform 0.2s;
+}
+.nav-cta:hover{background:var(--lime);color:var(--ink);transform:translateY(-1px)}
+
+/* ═══════════════════════════════════
+   HERO
+═══════════════════════════════════ */
+.hero{
+  min-height:100vh;background:var(--ink);
+  display:grid;grid-template-columns:1fr 1fr;
+  padding-top:80px;position:relative;overflow:hidden;
+}
+/* Animated halftone bg texture */
+.hero-halftone{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(200,241,53,0.06) 1px, transparent 1px);
+  background-size:28px 28px;
+  z-index:1;
+}
+.hero-left{
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:5rem 4rem 5rem 5rem;
+  position:relative;z-index:2;
+}
+.hero-eyebrow{
+  font-family:var(--dm);font-size:0.72rem;font-weight:400;
+  letter-spacing:0.35em;text-transform:uppercase;color:var(--grey);
+  margin-bottom:2rem;display:flex;align-items:center;gap:0.8rem;
+  opacity:0;animation:up 0.8s ease forwards 0.3s;
+}
+.hero-eyebrow span{
+  display:inline-block;width:6px;height:6px;
+  background:var(--lime);border-radius:50%;
+}
+.hero-h1{
+  font-family:var(--anton);
+  font-size:clamp(4.5rem,10vw,11rem);
+  line-height:0.9;
+  letter-spacing:0.02em;
+  color:var(--white);
+  opacity:0;animation:up 1s ease forwards 0.5s;
+}
+.hero-h1 .lime{color:var(--lime)}
+.hero-h1 .italic-serif{
+  font-family:var(--serif);font-style:italic;
+  font-size:0.65em;letter-spacing:0.01em;
+  display:block;color:rgba(250,250,248,0.45);
+}
+.hero-divider{
+  width:60px;height:3px;background:var(--lime);
+  margin:2rem 0;
+  opacity:0;animation:up 0.8s ease forwards 0.8s;
+}
+.hero-sub{
+  font-family:var(--dm);font-size:1rem;font-weight:300;
+  line-height:1.8;color:rgba(250,250,248,0.5);
+  max-width:400px;
+  opacity:0;animation:up 1s ease forwards 1s;
+}
+.hero-btns{
+  display:flex;gap:1rem;margin-top:2.5rem;
+  opacity:0;animation:up 1s ease forwards 1.2s;
+}
+.btn-lime{
+  font-family:var(--dm);font-size:0.82rem;font-weight:500;
+  letter-spacing:0.08em;background:var(--lime);color:var(--ink);
+  padding:0.95rem 2.2rem;text-decoration:none;border-radius:2px;
+  transition:background 0.3s,transform 0.2s,box-shadow 0.3s;display:inline-block;
+}
+.btn-lime:hover{background:var(--lime-d);transform:translateY(-2px);box-shadow:0 8px 24px var(--lime-glow)}
+.btn-ghost-w{
+  font-family:var(--dm);font-size:0.82rem;font-weight:400;
+  letter-spacing:0.08em;border:1px solid rgba(250,250,248,0.2);
+  color:rgba(250,250,248,0.6);padding:0.95rem 2rem;text-decoration:none;
+  border-radius:2px;transition:all 0.3s;display:inline-block;
+}
+.btn-ghost-w:hover{border-color:var(--lime);color:var(--lime)}
+
+/* Hero right — image */
+.hero-right{position:relative;overflow:hidden}
+.hero-img{
+  width:100%;height:100%;object-fit:cover;object-position:top center;
+  filter:grayscale(20%) brightness(0.75) contrast(1.1);
+  transform:scale(1.05);animation:hZoom 8s ease forwards;
+}
+@keyframes hZoom{to{transform:scale(1)}}
+.hero-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--ink) 0%,transparent 30%),
+             linear-gradient(to top,rgba(14,14,14,0.4) 0%,transparent 40%);
+}
+/* Lime corner accent */
+.hero-corner{
+  position:absolute;top:2rem;right:2rem;
+  width:80px;height:80px;border-top:3px solid var(--lime);border-right:3px solid var(--lime);
+  z-index:2;opacity:0;animation:up 1s ease forwards 1.4s;
+}
+.hero-corner-br{
+  position:absolute;bottom:2rem;left:2rem;
+  width:60px;height:60px;border-bottom:3px solid var(--lime);border-left:3px solid var(--lime);
+  z-index:2;opacity:0;animation:up 1s ease forwards 1.4s;
+}
+/* Stat badge on image */
+.hero-stat-badge{
+  position:absolute;bottom:3rem;right:3rem;
+  background:var(--lime);color:var(--ink);padding:1.2rem 1.5rem;
+  z-index:3;opacity:0;animation:up 1s ease forwards 1.6s;
+}
+.hsb-num{font-family:var(--anton);font-size:2rem;letter-spacing:0.03em;line-height:1}
+.hsb-lbl{font-family:var(--dm);font-size:0.6rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;margin-top:2px}
+
+/* Hero bottom — stats bar */
+.hero-stats-bar{
+  grid-column:1/-1;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid rgba(250,250,248,0.07);
+  position:relative;z-index:2;
+}
+.hsb{
+  padding:1.8rem 3rem;border-right:1px solid rgba(250,250,248,0.07);
+  display:flex;flex-direction:column;gap:0.2rem;
+  background:rgba(250,250,248,0.02);transition:background 0.3s;
+}
+.hsb:hover{background:rgba(200,241,53,0.04)}
+.hsb:last-child{border-right:none}
+.hsb-number{font-family:var(--anton);font-size:2.2rem;color:var(--white);letter-spacing:0.03em;line-height:1}
+.hsb-label{font-family:var(--dm);font-size:0.62rem;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey)}
+
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════
+   MARQUEE STRIP
+═══════════════════════════════════ */
+.marquee{
+  background:var(--lime);overflow:hidden;
+  padding:0.9rem 0;white-space:nowrap;
+}
+.marquee-track{
+  display:inline-flex;animation:mq 25s linear infinite;
+}
+.marquee-item{
+  font-family:var(--anton);font-size:1rem;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--ink);padding:0 2.5rem;
+  display:flex;align-items:center;gap:2.5rem;
+}
+.mq-sep{font-size:0.5rem;opacity:0.4}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════════ */
+.container{max-width:1300px;margin:0 auto;padding:0 5rem}
+.sec-eyebrow{
+  font-family:var(--dm);font-size:0.7rem;font-weight:500;
+  letter-spacing:0.35em;text-transform:uppercase;color:var(--grey);
+  display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;
+}
+.sec-eyebrow .line{width:28px;height:1.5px;background:var(--lime)}
+.sec-title{
+  font-family:var(--anton);font-size:clamp(2.5rem,5vw,5rem);
+  letter-spacing:0.03em;line-height:0.95;color:var(--ink);
+}
+.sec-title .accent{color:var(--lime)}
+.sec-title-light{color:var(--white)}
+.sec-title .serif-it{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0.01em}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(22px);transition:opacity 0.7s ease,transform 0.7s ease}
+.rv.v{opacity:1;transform:translateY(0)}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}.rv.d4{transition-delay:.4s}
+
+/* ═══════════════════════════════════
+   CLASSES / PROGRAMS
+═══════════════════════════════════ */
+.classes{padding:7rem 0;background:var(--white)}
+.classes-header{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:4rem;
+}
+.classes-link{
+  font-family:var(--dm);font-size:0.78rem;font-weight:500;
+  letter-spacing:0.1em;color:var(--grey);text-decoration:none;
+  border-bottom:1px solid var(--off2);padding-bottom:2px;
+  transition:color 0.3s,border-color 0.3s;
+}
+.classes-link:hover{color:var(--ink);border-color:var(--ink)}
+
+.classes-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1.5px;background:var(--off2);
+}
+.class-card{
+  background:var(--white);
+  padding:2.5rem 2rem;
+  position:relative;overflow:hidden;
+  cursor:none;
+  transition:background 0.4s;
+  opacity:0;transform:translateY(18px);
+  transition:background 0.4s,opacity 0.6s ease,transform 0.6s ease;
+}
+.class-card.v{opacity:1;transform:translateY(0)}
+.class-card:nth-child(2){transition-delay:.08s}
+.class-card:nth-child(3){transition-delay:.16s}
+.class-card:nth-child(4){transition-delay:.24s}
+.class-card:hover{background:var(--ink)}
+/* Lime fill on hover — bottom to top */
+.class-card::before{
+  content:'';position:absolute;inset:0;
+  background:var(--lime);transform:scaleY(0);transform-origin:bottom;
+  transition:transform 0.45s cubic-bezier(.76,0,.24,1);z-index:0;
+}
+.class-card:hover::before{transform:scaleY(1)}
+.class-card-inner{position:relative;z-index:1}
+.class-icon{
+  width:48px;height:48px;margin-bottom:2rem;
+  transition:transform 0.3s;font-size:1.8rem;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--off);border-radius:50%;
+}
+.class-card:hover .class-icon{transform:scale(1.1);background:rgba(14,14,14,0.12)}
+.class-num{
+  font-family:var(--dm);font-size:0.6rem;font-weight:500;
+  letter-spacing:0.3em;color:var(--grey-l);margin-bottom:0.6rem;
+  transition:color 0.3s;
+}
+.class-card:hover .class-num{color:var(--ink)}
+.class-name{
+  font-family:var(--anton);font-size:1.5rem;letter-spacing:0.04em;
+  color:var(--ink);line-height:1;margin-bottom:0.7rem;
+  transition:color 0.3s;
+}
+.class-card:hover .class-name{color:var(--ink)}
+.class-desc{
+  font-family:var(--dm);font-size:0.82rem;font-weight:300;
+  line-height:1.7;color:var(--grey);
+  transition:color 0.3s;
+}
+.class-card:hover .class-desc{color:rgba(14,14,14,0.65)}
+.class-tags{
+  display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1.2rem;
+}
+.class-tag{
+  font-family:var(--dm);font-size:0.6rem;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:0.2rem 0.6rem;border:1px solid var(--off2);
+  color:var(--grey);border-radius:2px;
+  transition:all 0.3s;
+}
+.class-card:hover .class-tag{border-color:rgba(14,14,14,0.2);color:var(--ink-soft)}
+.class-arrow{
+  position:absolute;bottom:2rem;right:2rem;
+  width:36px;height:36px;border-radius:50%;border:1.5px solid var(--off2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;color:var(--grey);
+  transform:translateY(4px);opacity:0;
+  transition:all 0.35s;z-index:1;
+}
+.class-card:hover .class-arrow{opacity:1;transform:translateY(0);border-color:rgba(14,14,14,0.2);color:var(--ink)}
+
+/* ═══════════════════════════════════
+   ABOUT / PHILOSOPHY
+═══════════════════════════════════ */
+.about{
+  padding:0;background:var(--ink);
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:80vh;
+}
+.about-img-side{position:relative;overflow:hidden}
+.about-img{
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(25%) contrast(1.05);
+  transition:transform 0.8s;
+}
+.about-img-side:hover .about-img{transform:scale(1.04)}
+.about-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(14,14,14,0) 0%,rgba(14,14,14,0.4) 100%);
+}
+/* Big number overlay */
+.about-bg-num{
+  position:absolute;bottom:-2rem;right:2rem;
+  font-family:var(--anton);font-size:18rem;line-height:1;
+  color:rgba(200,241,53,0.05);pointer-events:none;letter-spacing:0.02em;
+}
+.about-content{
+  padding:6rem 5rem;display:flex;flex-direction:column;justify-content:center;
+}
+.about-quote{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(1.8rem,3vw,2.8rem);line-height:1.3;
+  color:var(--white);margin:1.5rem 0 2rem;
+}
+.about-quote .lime{color:var(--lime)}
+.about-p{
+  font-family:var(--dm);font-size:0.92rem;font-weight:300;
+  line-height:1.9;color:rgba(250,250,248,0.5);max-width:460px;
+}
+.about-p + .about-p{margin-top:1rem}
+.about-points{
+  display:flex;gap:2rem;margin-top:2.5rem;
+  padding-top:2.5rem;border-top:1px solid rgba(250,250,248,0.08);
+}
+.ap{display:flex;flex-direction:column;gap:0.3rem;flex:1}
+.ap-num{font-family:var(--anton);font-size:2rem;color:var(--lime);letter-spacing:0.03em;line-height:1}
+.ap-lbl{font-family:var(--dm);font-size:0.65rem;font-weight:400;letter-spacing:0.15em;text-transform:uppercase;color:var(--grey)}
+
+/* ═══════════════════════════════════
+   TRAINERS
+═══════════════════════════════════ */
+.trainers{padding:7rem 0;background:var(--off)}
+.trainers-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;margin-top:4rem;
+}
+.trainer{
+  background:var(--white);
+  overflow:hidden;
+  opacity:0;transform:translateY(18px);
+  transition:opacity 0.65s ease,transform 0.65s ease,box-shadow 0.3s;
+}
+.trainer.v{opacity:1;transform:translateY(0)}
+.trainer:nth-child(2){transition-delay:.1s;margin-top:2.5rem}
+.trainer:nth-child(3){transition-delay:.2s}
+.trainer:hover{box-shadow:0 12px 40px rgba(14,14,14,0.12)}
+.trainer-photo{
+  width:100%;aspect-ratio:3/4;overflow:hidden;position:relative;
+}
+.trainer-photo img{
+  width:100%;height:100%;object-fit:cover;object-position:top;
+  filter:grayscale(15%);transition:transform 0.6s,filter 0.5s;
+}
+.trainer:hover .trainer-photo img{transform:scale(1.05);filter:grayscale(0%)}
+/* Lime bottom accent */
+.trainer-photo::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:var(--lime);transform:scaleX(0);transform-origin:left;
+  transition:transform 0.4s;
+}
+.trainer:hover .trainer-photo::after{transform:scaleX(1)}
+.trainer-body{padding:1.8rem}
+.trainer-spec{
+  font-family:var(--dm);font-size:0.62rem;font-weight:500;
+  letter-spacing:0.25em;text-transform:uppercase;color:var(--grey);margin-bottom:0.4rem;
+}
+.trainer-name{
+  font-family:var(--anton);font-size:1.5rem;letter-spacing:0.04em;
+  color:var(--ink);line-height:1;margin-bottom:0.6rem;
+}
+.trainer-exp{
+  font-family:var(--dm);font-size:0.8rem;font-weight:300;
+  color:var(--grey);line-height:1.6;
+}
+.trainer-chips{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem}
+.chip{
+  font-family:var(--dm);font-size:0.6rem;font-weight:500;
+  letter-spacing:0.08em;padding:0.25rem 0.65rem;
+  background:var(--off);color:var(--grey);border-radius:100px;
+}
+
+/* ═══════════════════════════════════
+   PRICING
+═══════════════════════════════════ */
+.pricing{padding:7rem 0;background:var(--white)}
+.pricing-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+  margin-top:4rem;
+}
+.price-card{
+  padding:2.5rem;border:1.5px solid var(--off2);
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateY(18px);
+  transition:opacity 0.65s,transform 0.65s,border-color 0.3s;
+}
+.price-card.v{opacity:1;transform:translateY(0)}
+.price-card:nth-child(2){transition-delay:.1s}
+.price-card:nth-child(3){transition-delay:.2s}
+.price-card.featured{
+  background:var(--ink);border-color:var(--ink);
+  transform:translateY(-12px);
+}
+.price-card.featured.v{transform:translateY(-12px)}
+.price-card:hover:not(.featured){border-color:var(--ink)}
+.price-card.featured:hover{transform:translateY(-16px)}
+/* Pop badge */
+.pop-badge{
+  position:absolute;top:1.5rem;right:1.5rem;
+  background:var(--lime);color:var(--ink);
+  font-family:var(--dm);font-size:0.6rem;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:2px;
+}
+.plan-tier{
+  font-family:var(--dm);font-size:0.65rem;font-weight:500;
+  letter-spacing:0.25em;text-transform:uppercase;color:var(--grey);margin-bottom:1rem;
+}
+.price-card.featured .plan-tier{color:rgba(250,250,248,0.45)}
+.plan-price{
+  font-family:var(--anton);font-size:3.5rem;letter-spacing:0.02em;
+  color:var(--ink);line-height:1;
+}
+.price-card.featured .plan-price{color:var(--white)}
+.plan-price .sym{font-size:1.4rem;vertical-align:top;margin-top:0.7rem;display:inline-block}
+.plan-price .mo{font-family:var(--dm);font-size:0.8rem;font-weight:400;letter-spacing:0.08em;color:var(--grey)}
+.price-card.featured .plan-price .mo{color:rgba(250,250,248,0.4)}
+.plan-divider{height:1.5px;background:var(--off2);margin:1.5rem 0}
+.price-card.featured .plan-divider{background:rgba(250,250,248,0.1)}
+.plan-feats{display:flex;flex-direction:column;gap:0.65rem;margin-bottom:2rem}
+.pf{
+  font-family:var(--dm);font-size:0.82rem;font-weight:300;
+  color:var(--grey-l);display:flex;align-items:center;gap:0.7rem;
+}
+.price-card.featured .pf{color:rgba(250,250,248,0.55)}
+.pf .ck{font-size:0.75rem}
+.pf.active{color:var(--ink-soft)}
+.price-card.featured .pf.active{color:var(--white)}
+.pf.off{opacity:0.35}
+.plan-btn{
+  display:block;text-align:center;
+  font-family:var(--dm);font-size:0.78rem;font-weight:500;
+  letter-spacing:0.1em;padding:0.95rem;text-decoration:none;
+  border-radius:2px;transition:all 0.3s;border:1.5px solid var(--off2);
+  color:var(--ink);
+}
+.plan-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.price-card.featured .plan-btn{
+  background:var(--lime);border-color:var(--lime);color:var(--ink);
+}
+.price-card.featured .plan-btn:hover{background:var(--lime-d);border-color:var(--lime-d)}
+
+/* ═══════════════════════════════════
+   GALLERY
+═══════════════════════════════════ */
+.gallery{background:var(--off)}
+.gallery-inner{padding:5rem 5rem 0}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  grid-template-rows:260px 260px;
+  gap:1.5px;margin-top:3rem;
+}
+.gi{overflow:hidden;position:relative}
+.gi:first-child{grid-row:1/3}
+.gi img{
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(20%) brightness(0.88);
+  transition:transform 0.7s,filter 0.5s;
+}
+.gi:hover img{transform:scale(1.07);filter:grayscale(0%) brightness(0.95)}
+.gi-ov{
+  position:absolute;inset:0;
+  background:rgba(14,14,14,0);transition:background 0.4s;
+  display:flex;align-items:flex-end;padding:1.2rem;
+}
+.gi:hover .gi-ov{background:rgba(200,241,53,0.1)}
+.gi-lbl{
+  font-family:var(--dm);font-size:0.65rem;font-weight:500;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--white);
+  opacity:0;transform:translateY(4px);transition:all 0.4s;
+}
+.gi:hover .gi-lbl{opacity:1;transform:translateY(0)}
+/* IG strip */
+.ig-bar{
+  background:var(--ink);padding:1.2rem 5rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ig-bar-left{
+  display:flex;align-items:center;gap:0.8rem;
+  font-family:var(--dm);font-size:0.8rem;font-weight:400;color:rgba(250,250,248,0.5);
+}
+.ig-bar-left svg{width:18px;height:18px;fill:rgba(250,250,248,0.5)}
+.ig-handle{
+  font-family:var(--dm);font-size:0.9rem;font-weight:500;color:var(--white);letter-spacing:0.03em;
+}
+.ig-link{
+  font-family:var(--dm);font-size:0.75rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--lime);text-decoration:none;
+  border-bottom:1px solid rgba(200,241,53,0.3);
+  padding-bottom:2px;transition:border-color 0.3s;
+}
+.ig-link:hover{border-color:var(--lime)}
+
+/* ═══════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════ */
+.testi{padding:7rem 0;background:var(--white);overflow:hidden}
+.testi-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;margin-top:4rem;
+}
+.tc{
+  padding:2.2rem;border:1.5px solid var(--off2);
+  position:relative;transition:border-color 0.3s,transform 0.3s;
+  opacity:0;transform:translateY(16px);
+  transition:opacity 0.65s,transform 0.65s,border-color 0.3s;
+}
+.tc.v{opacity:1;transform:translateY(0)}
+.tc:nth-child(2){transition-delay:.1s;margin-top:2rem}
+.tc:nth-child(3){transition-delay:.2s}
+.tc:hover{border-color:var(--ink);transform:translateY(-3px)}
+.tc-stars{color:var(--lime);font-size:0.75rem;margin-bottom:1rem;letter-spacing:0.05em}
+.tc-txt{
+  font-family:var(--dm);font-size:0.88rem;font-weight:300;
+  line-height:1.8;color:var(--grey);font-style:italic;margin-bottom:1.4rem;
+}
+.tc-name{
+  font-family:var(--dm);font-size:0.72rem;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);
+  display:flex;align-items:center;gap:0.6rem;
+}
+.tc-name::before{content:'';display:inline-block;width:18px;height:1.5px;background:var(--lime)}
+
+/* ═══════════════════════════════════
+   CONTACT / QUERY FORM
+═══════════════════════════════════ */
+.contact{
+  padding:7rem 0;background:var(--ink);
+  position:relative;overflow:hidden;
+}
+.contact::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle, rgba(200,241,53,0.04) 1px, transparent 1px);
+  background-size:32px 32px;pointer-events:none;
+}
+.contact-inner{
+  display:grid;grid-template-columns:1fr 1.1fr;
+  gap:6rem;align-items:start;position:relative;z-index:1;
+}
+.contact-left .sec-eyebrow .line{background:rgba(200,241,53,0.5)}
+.contact-left .sec-eyebrow{color:rgba(250,250,248,0.4)}
+.contact-left .sec-title{color:var(--white)}
+.contact-sub{
+  font-family:var(--dm);font-size:0.92rem;font-weight:300;
+  line-height:1.85;color:rgba(250,250,248,0.45);
+  max-width:380px;margin-top:1.5rem;
+}
+.contact-info{display:flex;flex-direction:column;gap:1.5rem;margin-top:3rem}
+.ci-row{display:flex;gap:1rem;align-items:flex-start}
+.ci-icon{
+  width:42px;height:42px;flex-shrink:0;
+  background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:1rem;border-radius:2px;
+}
+.ci-label{
+  font-family:var(--dm);font-size:0.6rem;font-weight:500;
+  letter-spacing:0.2em;text-transform:uppercase;color:rgba(250,250,248,0.3);margin-bottom:0.2rem;
+}
+.ci-val{
+  font-family:var(--dm);font-size:0.9rem;font-weight:400;color:var(--white);
+}
+.ci-val a{color:var(--lime);text-decoration:none;transition:opacity 0.3s}
+.ci-val a:hover{opacity:0.8}
+.contact-socials{display:flex;gap:0.6rem;margin-top:2.5rem}
+.cs{
+  width:38px;height:38px;border:1px solid rgba(250,250,248,0.1);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(250,250,248,0.4);text-decoration:none;
+  font-family:var(--dm);font-size:0.65rem;font-weight:600;
+  letter-spacing:0.05em;border-radius:2px;transition:all 0.3s;
+}
+.cs:hover{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+
+/* Form */
+.qform{
+  background:var(--white);padding:3rem;
+  position:relative;
+}
+.qform::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--lime);
+}
+.qform-title{
+  font-family:var(--anton);font-size:1.6rem;letter-spacing:0.04em;color:var(--ink);
+  margin-bottom:0.3rem;
+}
+.qform-sub{
+  font-family:var(--dm);font-size:0.75rem;font-weight:300;color:var(--grey);margin-bottom:2rem;
+}
+.fg{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.1rem}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.fg label{
+  font-family:var(--dm);font-size:0.62rem;font-weight:500;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--grey);
+}
+.fg input,.fg select,.fg textarea{
+  background:var(--off);border:1.5px solid transparent;
+  color:var(--ink);padding:0.78rem 0.9rem;
+  font-family:var(--dm);font-size:0.88rem;font-weight:300;
+  outline:none;width:100%;border-radius:2px;
+  transition:border-color 0.3s,background 0.3s;
+  -webkit-appearance:none;appearance:none;
+}
+.fg select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237A7A72'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 0.9rem center;
+  padding-right:2.2rem;background-color:var(--off);
+}
+.fg select option{background:var(--white)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--grey-l);font-style:italic}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-color:var(--lime);background:var(--white);
+}
+.fg textarea{resize:none;height:90px}
+.sub-btn{
+  width:100%;font-family:var(--dm);font-size:0.82rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:var(--ink);color:var(--white);border:none;
+  padding:1.1rem;border-radius:2px;cursor:none;
+  transition:background 0.3s,transform 0.2s;margin-top:0.5rem;
+  display:flex;align-items:center;justify-content:center;gap:0.7rem;
+}
+.sub-btn:hover{background:var(--lime);color:var(--ink);transform:translateY(-1px)}
+.sub-btn:disabled{opacity:0.5;pointer-events:none}
+.fmsg{
+  margin-top:0.8rem;padding:0.85rem 1rem;
+  font-family:var(--dm);font-size:0.8rem;font-weight:400;
+  border-radius:2px;display:none;
+}
+.fmsg.ok{display:block;background:rgba(21,128,61,0.1);color:#166534;border:1px solid rgba(21,128,61,0.2)}
+.fmsg.err{display:block;background:rgba(185,28,28,0.08);color:#991b1b;border:1px solid rgba(185,28,28,0.15)}
+
+/* ═══════════════════════════════════
+   INFO BAR
+═══════════════════════════════════ */
+.info-bar{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1.5px solid var(--off2);background:var(--off);
+}
+.ib{
+  padding:2rem 3.5rem;border-right:1.5px solid var(--off2);
+  display:flex;align-items:center;gap:1.2rem;
+}
+.ib:last-child{border-right:none}
+.ib-icon{font-size:1.4rem}
+.ib-label{font-family:var(--dm);font-size:0.62rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--grey);margin-bottom:0.2rem}
+.ib-val{font-family:var(--dm);font-size:0.88rem;font-weight:500;color:var(--ink)}
+
+/* ═══════════════════════════════════
+   FOOTER
+═══════════════════════════════════ */
+footer{background:var(--ink-mid);padding:4rem 0 2rem;border-top:1px solid rgba(250,250,248,0.04)}
+.footer-inner{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3.5rem;
+  margin-bottom:3rem;
+}
+.ft-brand .logo{
+  font-family:var(--anton);font-size:1.8rem;letter-spacing:0.05em;
+  color:var(--white);text-decoration:none;display:flex;align-items:flex-end;gap:5px;
+}
+.ft-brand .logo .dot{width:6px;height:6px;background:var(--lime);border-radius:50%;margin-bottom:5px}
+.ft-brand p{font-family:var(--dm);font-size:0.8rem;font-weight:300;color:var(--grey);line-height:1.7;margin-top:0.8rem;max-width:240px}
+.ft-col h4{
+  font-family:var(--dm);font-size:0.6rem;font-weight:600;
+  letter-spacing:0.28em;text-transform:uppercase;color:var(--lime);margin-bottom:1.2rem;
+}
+.ft-col ul{list-style:none}
+.ft-col li{
+  font-family:var(--dm);font-size:0.8rem;font-weight:300;
+  color:rgba(250,250,248,0.4);padding:0.3rem 0;
+  border-bottom:1px solid rgba(250,250,248,0.03);transition:color 0.3s;cursor:default;
+}
+.ft-col li:hover{color:rgba(250,250,248,0.8)}
+.footer-bottom{
+  border-top:1px solid rgba(250,250,248,0.06);padding-top:1.5rem;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--dm);font-size:0.65rem;font-weight:300;
+  color:rgba(250,250,248,0.25);flex-wrap:wrap;gap:1rem;
+}
+.footer-bottom a{color:rgba(250,250,248,0.35);text-decoration:none;transition:color 0.3s}
+.footer-bottom a:hover{color:var(--lime)}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media(max-width:1200px){
+  .container,.classes-header,.footer-inner{padding:0 2.5rem}
+  .gallery-inner{padding:5rem 2.5rem 0}
+  .ig-bar{padding:1.2rem 2.5rem}
+  .classes-grid{grid-template-columns:1fr 1fr}
+  .pricing-grid{grid-template-columns:1fr 1fr}
+  .price-card:nth-child(3){grid-column:1/-1;transform:none}
+  .price-card.featured{transform:none}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:2.5rem}
+}
+@media(max-width:1024px){
+  nav{padding:1.2rem 2.5rem}
+  nav.sc{padding:0.9rem 2.5rem}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr}
+  .hero-right{min-height:60vw;order:-1}
+  .hero-stats-bar{grid-template-columns:1fr 1fr}
+  .about{grid-template-columns:1fr}
+  .about-img-side{min-height:400px}
+  .about-content{padding:4rem 2.5rem}
+  .trainers-grid{grid-template-columns:1fr 1fr}
+  .trainer:nth-child(2){margin-top:0}
+  .testi-grid{grid-template-columns:1fr 1fr}
+  .tc:nth-child(2){margin-top:0}
+  .contact-inner{grid-template-columns:1fr;gap:3rem}
+  .info-bar{grid-template-columns:1fr}
+  .ib{border-right:none;border-bottom:1.5px solid var(--off2)}
+  .ib:last-child{border-bottom:none}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,220px)}
+  .gi:first-child{grid-row:auto}
+}
+@media(max-width:768px){
+  .hero-h1{font-size:4rem}
+  .hero-left{padding:3rem 2.5rem 2rem}
+  .classes-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .price-card.featured{transform:none}
+  .trainers-grid{grid-template-columns:1fr}
+  .trainer:nth-child(2){margin-top:0}
+  .testi-grid{grid-template-columns:1fr}
+  .tc:nth-child(2){margin-top:0}
+  .fg-row{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center;gap:0.5rem}
+  .contact-inner{padding:0 2.5rem}
+  .contact{padding:5rem 0}
+  .qform{padding:2rem}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- ══════════════════════════════════
+     NAV
+══════════════════════════════════ -->
+<nav id="mainnav">
+  <a class="nav-logo" href="#">
+    Just Fitness<div class="dot"></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#trainers">Trainers</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Free Trial</a>
+</nav>
+
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-halftone"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow"><span></span>Your Fitness. Your Rules.</div>
+    <h1 class="hero-h1">
+      Just<br>
+      <span class="lime">Do</span><br>
+      <span class="italic-serif">the work.</span>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">No gimmicks. No shortcuts. Just a serious gym for serious people — and beginners who are ready to become serious people.</p>
+    <div class="hero-btns">
+      <a class="btn-lime" href="#contact">Start Free Trial</a>
+      <a class="btn-ghost-w" href="#classes">See Classes</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img
+      class="hero-img"
+      src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&auto=format&fit=crop&q=90"
+      alt="Just Fitness Gym"
+    />
+    <div class="hero-img-overlay"></div>
+    <div class="hero-corner"></div>
+    <div class="hero-corner-br"></div>
+    <div class="hero-stat-badge">
+      <div class="hsb-num">500+</div>
+      <div class="hsb-lbl">Members Strong</div>
+    </div>
+  </div>
+
+  <div class="hero-stats-bar">
+    <div class="hsb">
+      <div class="hsb-number">6AM</div>
+      <div class="hsb-label">Opens Daily</div>
+    </div>
+    <div class="hsb">
+      <div class="hsb-number">15+</div>
+      <div class="hsb-label">Weekly Classes</div>
+    </div>
+    <div class="hsb">
+      <div class="hsb-number">7</div>
+      <div class="hsb-label">Expert Trainers</div>
+    </div>
+    <div class="hsb">
+      <div class="hsb-number">100%</div>
+      <div class="hsb-label">Results Focus</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Strength Training<span class="mq-sep">◆</span>Cardio<span class="mq-sep">◆</span>Weight Loss<span class="mq-sep">◆</span>Personal Training<span class="mq-sep">◆</span>Yoga<span class="mq-sep">◆</span>Group Classes<span class="mq-sep">◆</span>Zumba<span class="mq-sep">◆</span>CrossFit<span class="mq-sep">◆</span>Nutrition<span class="mq-sep">◆</span></div>
+    <div class="marquee-item">Strength Training<span class="mq-sep">◆</span>Cardio<span class="mq-sep">◆</span>Weight Loss<span class="mq-sep">◆</span>Personal Training<span class="mq-sep">◆</span>Yoga<span class="mq-sep">◆</span>Group Classes<span class="mq-sep">◆</span>Zumba<span class="mq-sep">◆</span>CrossFit<span class="mq-sep">◆</span>Nutrition<span class="mq-sep">◆</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     CLASSES
+══════════════════════════════════ -->
+<section id="classes" class="classes">
+  <div class="container">
+    <div class="classes-header">
+      <div>
+        <div class="sec-eyebrow rv"><div class="line"></div>What We Offer</div>
+        <h2 class="sec-title rv d1">Train Smarter.<br><span class="serif-it accent">Every Day.</span></h2>
+      </div>
+      <a class="classes-link rv d2" href="#contact">View Full Schedule →</a>
+    </div>
+  </div>
+  <div class="container" style="max-width:100%;padding:0">
+    <div class="classes-grid">
+
+      <div class="class-card">
+        <div class="class-card-inner">
+          <div class="class-icon">🏋️</div>
+          <div class="class-num">01 / Class</div>
+          <div class="class-name">Strength & Weights</div>
+          <div class="class-desc">Progressive overload programming with free weights, machines, and cables. Build real, lasting strength — not just pump.</div>
+          <div class="class-tags">
+            <span class="class-tag">Beginners</span>
+            <span class="class-tag">Advanced</span>
+            <span class="class-tag">All Levels</span>
+          </div>
+        </div>
+        <div class="class-arrow">→</div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-card-inner">
+          <div class="class-icon">🔥</div>
+          <div class="class-num">02 / Class</div>
+          <div class="class-name">HIIT & Cardio</div>
+          <div class="class-desc">High-intensity interval training designed to torch calories and supercharge your metabolism — all in 45 minutes.</div>
+          <div class="class-tags">
+            <span class="class-tag">Fat Burn</span>
+            <span class="class-tag">Endurance</span>
+          </div>
+        </div>
+        <div class="class-arrow">→</div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-card-inner">
+          <div class="class-icon">🧘</div>
+          <div class="class-num">03 / Class</div>
+          <div class="class-name">Yoga & Stretch</div>
+          <div class="class-desc">Flexibility, mobility, and mindfulness — the recovery work that most lifters skip and all bodies need.</div>
+          <div class="class-tags">
+            <span class="class-tag">Recovery</span>
+            <span class="class-tag">Flexibility</span>
+          </div>
+        </div>
+        <div class="class-arrow">→</div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-card-inner">
+          <div class="class-icon">💃</div>
+          <div class="class-num">04 / Class</div>
+          <div class="class-name">Zumba & Dance</div>
+          <div class="class-desc">Fitness disguised as a party. Burn up to 600 calories while you actually enjoy every second of the session.</div>
+          <div class="class-tags">
+            <span class="class-tag">Fun</span>
+            <span class="class-tag">Cardio</span>
+            <span class="class-tag">Women's Fav</span>
+          </div>
+        </div>
+        <div class="class-arrow">→</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     ABOUT
+══════════════════════════════════ -->
+<section id="about" class="about">
+  <div class="about-img-side">
+    <img
+      class="about-img"
+      src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&auto=format&fit=crop&q=85"
+      alt="Just Fitness gym interior"
+    />
+    <div class="about-img-overlay"></div>
+    <div class="about-bg-num">JF</div>
+  </div>
+  <div class="about-content">
+    <div class="sec-eyebrow rv" style="color:rgba(250,250,248,0.4)"><div class="line" style="background:rgba(200,241,53,0.5)"></div>Our Philosophy</div>
+    <div class="about-quote rv d1">
+      "Just Fitness.<br>
+      <span class="lime">Just Results.</span><br>
+      Just you."
+    </div>
+    <p class="about-p rv d2">We started Just Fitness because we were tired of gyms that sold dreams instead of delivering results. No celebrity trainers, no overpriced smoothies, no Instagram-worthy machines that nobody knows how to use.</p>
+    <p class="about-p rv d3">Just a clean, well-equipped space. Knowledgeable coaches. A community that shows up. And a straightforward promise: work hard, be consistent, and you will transform.</p>
+    <div class="about-points rv d4">
+      <div class="ap">
+        <div class="ap-num">500+</div>
+        <div class="ap-lbl">Active Members</div>
+      </div>
+      <div class="ap">
+        <div class="ap-num">7</div>
+        <div class="ap-lbl">Expert Trainers</div>
+      </div>
+      <div class="ap">
+        <div class="ap-num">4+</div>
+        <div class="ap-lbl">Years Running</div>
+      </div>
+      <div class="ap">
+        <div class="ap-num">15+</div>
+        <div class="ap-lbl">Classes / Week</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     TRAINERS
+══════════════════════════════════ -->
+<section id="trainers" class="trainers">
+  <div class="container">
+    <div class="sec-eyebrow rv"><div class="line"></div>The Team</div>
+    <h2 class="sec-title rv d1">Meet Your<br><span class="serif-it">Coaches</span></h2>
+    <div class="trainers-grid">
+
+      <div class="trainer rv">
+        <div class="trainer-photo">
+          <img
+            src="https://images.unsplash.com/photo-1567013127542-490d757e6349?w=600&auto=format&fit=crop&q=80"
+            alt="Strength Coach"
+          />
+        </div>
+        <div class="trainer-body">
+          <div class="trainer-spec">Head Coach · Strength</div>
+          <div class="trainer-name">Rahul Sharma</div>
+          <div class="trainer-exp">NSCA Certified · 10 years coaching · Former national powerlifter with a philosophy rooted in evidence-based training.</div>
+          <div class="trainer-chips">
+            <span class="chip">Powerlifting</span>
+            <span class="chip">Body Recomp</span>
+            <span class="chip">Nutrition</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="trainer rv d1">
+        <div class="trainer-photo">
+          <img
+            src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=600&auto=format&fit=crop&q=80"
+            alt="Fitness Coach"
+          />
+        </div>
+        <div class="trainer-body">
+          <div class="trainer-spec">Trainer · Cardio & Dance</div>
+          <div class="trainer-name">Kavya Mehta</div>
+          <div class="trainer-exp">Certified Zumba Instructor · HIIT Specialist · Passionate about making fitness feel like something you actually want to do.</div>
+          <div class="trainer-chips">
+            <span class="chip">Zumba</span>
+            <span class="chip">HIIT</span>
+            <span class="chip">Weight Loss</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="trainer rv d2">
+        <div class="trainer-photo">
+          <img
+            src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80"
+            alt="Personal Trainer"
+          />
+        </div>
+        <div class="trainer-body">
+          <div class="trainer-spec">Trainer · Functional Fitness</div>
+          <div class="trainer-name">Deepak Nair</div>
+          <div class="trainer-exp">Sports Science Graduate · Functional movement specialist · Works with everyone from athletes to beginners to seniors.</div>
+          <div class="trainer-chips">
+            <span class="chip">Functional</span>
+            <span class="chip">Yoga</span>
+            <span class="chip">Rehab</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PRICING
+══════════════════════════════════ -->
+<section id="pricing" class="pricing">
+  <div class="container">
+    <div class="sec-eyebrow rv"><div class="line"></div>Membership</div>
+    <h2 class="sec-title rv d1">Simple <span class="serif-it">Pricing.</span><br>No Hidden Fees.</h2>
+    <div class="pricing-grid">
+
+      <div class="price-card rv">
+        <div class="plan-tier">Basic</div>
+        <div class="plan-price">
+          <span class="sym">₹</span>1,499<span class="mo">/mo</span>
+        </div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="pf active"><span class="ck">✓</span> Full Gym Access (6AM–10PM)</div>
+          <div class="pf active"><span class="ck">✓</span> 2 Group Classes / Week</div>
+          <div class="pf active"><span class="ck">✓</span> Locker Access</div>
+          <div class="pf active"><span class="ck">✓</span> Initial Fitness Assessment</div>
+          <div class="pf off"><span class="ck">✗</span> Personal Training Sessions</div>
+          <div class="pf off"><span class="ck">✗</span> Nutrition Guidance</div>
+          <div class="pf off"><span class="ck">✗</span> Unlimited Classes</div>
+        </div>
+        <a class="plan-btn" href="#contact">Get Started</a>
+      </div>
+
+      <div class="price-card featured rv d1">
+        <div class="pop-badge">Best Value</div>
+        <div class="plan-tier">Standard</div>
+        <div class="plan-price">
+          <span class="sym">₹</span>2,799<span class="mo">/mo</span>
+        </div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="pf active"><span class="ck">✓</span> Unlimited Gym Access</div>
+          <div class="pf active"><span class="ck">✓</span> All Group Classes</div>
+          <div class="pf active"><span class="ck">✓</span> 2 PT Sessions / Month</div>
+          <div class="pf active"><span class="ck">✓</span> Nutrition Consultation</div>
+          <div class="pf active"><span class="ck">✓</span> Progress Tracking</div>
+          <div class="pf active"><span class="ck">✓</span> Towel & Locker Service</div>
+          <div class="pf off"><span class="ck">✗</span> Unlimited PT Sessions</div>
+        </div>
+        <a class="plan-btn" href="#contact">Join Now</a>
+      </div>
+
+      <div class="price-card rv d2">
+        <div class="plan-tier">Premium</div>
+        <div class="plan-price">
+          <span class="sym">₹</span>4,999<span class="mo">/mo</span>
+        </div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="pf active"><span class="ck">✓</span> Everything in Standard</div>
+          <div class="pf active"><span class="ck">✓</span> 8 PT Sessions / Month</div>
+          <div class="pf active"><span class="ck">✓</span> Custom Training Plan</div>
+          <div class="pf active"><span class="ck">✓</span> Monthly Body Composition</div>
+          <div class="pf active"><span class="ck">✓</span> Full Nutrition Plan</div>
+          <div class="pf active"><span class="ck">✓</span> Priority Class Booking</div>
+          <div class="pf active"><span class="ck">✓</span> Guest Passes (2/mo)</div>
+        </div>
+        <a class="plan-btn" href="#contact">Go Premium</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     GALLERY
+══════════════════════════════════ -->
+<section id="gallery" class="gallery">
+  <div class="gallery-inner">
+    <div class="sec-eyebrow rv"><div class="line"></div>Inside the Gym</div>
+    <h2 class="sec-title rv d1">The <span class="serif-it accent">Floor</span></h2>
+  </div>
+  <div class="gallery-grid" style="margin:3rem 0 0">
+    <div class="gi">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&auto=format&fit=crop&q=85" alt="Gym floor"/>
+      <div class="gi-ov"><div class="gi-lbl">Main Floor</div></div>
+    </div>
+    <div class="gi">
+      <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&auto=format&fit=crop&q=80" alt="Free weights"/>
+      <div class="gi-ov"><div class="gi-lbl">Free Weights</div></div>
+    </div>
+    <div class="gi">
+      <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600&auto=format&fit=crop&q=80" alt="Training"/>
+      <div class="gi-ov"><div class="gi-lbl">Personal Training</div></div>
+    </div>
+    <div class="gi">
+      <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&auto=format&fit=crop&q=80" alt="Group class"/>
+      <div class="gi-ov"><div class="gi-lbl">Group Classes</div></div>
+    </div>
+    <div class="gi">
+      <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=600&auto=format&fit=crop&q=80" alt="Cardio"/>
+      <div class="gi-ov"><div class="gi-lbl">Cardio Zone</div></div>
+    </div>
+  </div>
+  <div class="ig-bar">
+    <div class="ig-bar-left">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Follow our journey
+    </div>
+    <span class="ig-handle">@justfitness_2024</span>
+    <a class="ig-link" href="https://www.instagram.com/justfitness_2024/" target="_blank" rel="noopener">Follow on Instagram →</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     TESTIMONIALS
+══════════════════════════════════ -->
+<section class="testi">
+  <div class="container">
+    <div class="sec-eyebrow rv"><div class="line"></div>Real People</div>
+    <h2 class="sec-title rv d1">What Our Members <span class="serif-it">Say</span></h2>
+    <div class="testi-grid">
+      <div class="tc rv">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-txt">"I've been to five different gyms in my life. Just Fitness is the first one I've actually stayed at beyond three months. The trainers genuinely care, the equipment is great, and I've lost 11kg in four months."</p>
+        <div class="tc-name">Ankita R. — Member, 5 months</div>
+      </div>
+      <div class="tc rv d1">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-txt">"Rahul's strength programme completely changed the way I train. I was doing everything wrong for years. Now I squat, deadlift, and bench properly and I'm stronger than I've ever been. Solid place."</p>
+        <div class="tc-name">Gurpreet S. — Member, 8 months</div>
+      </div>
+      <div class="tc rv d2">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-txt">"Kavya's Zumba class is genuinely the highlight of my week. I never thought I'd enjoy exercise but here I am, coming five times a week. Clean gym, friendly faces, no egos. Highly recommend."</p>
+        <div class="tc-name">Pooja M. — Member, 3 months</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     INFO BAR
+══════════════════════════════════ -->
+<div class="info-bar container" style="max-width:100%;padding:0">
+  <div class="ib">
+    <div class="ib-icon">📍</div>
+    <div>
+      <div class="ib-label">Location</div>
+      <div class="ib-val">Follow Instagram for exact address</div>
+    </div>
+  </div>
+  <div class="ib">
+    <div class="ib-icon">⏰</div>
+    <div>
+      <div class="ib-label">Hours</div>
+      <div class="ib-val">Mon–Sat 6:00 AM – 10:00 PM · Sun 8:00 AM – 6:00 PM</div>
+    </div>
+  </div>
+  <div class="ib">
+    <div class="ib-icon">📱</div>
+    <div>
+      <div class="ib-label">Instagram</div>
+      <div class="ib-val">@justfitness_2024</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     CONTACT / QUERY FORM
+══════════════════════════════════ -->
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="contact-left">
+        <div class="sec-eyebrow rv"><div class="line"></div>Let's Talk</div>
+        <h2 class="sec-title sec-title-light rv d1">Send Us<br>a Message</h2>
+        <p class="contact-sub rv d2">Have a question about joining, programs, or pricing? Drop us a message — we reply fast. Or slide into our DMs on Instagram anytime.</p>
+
+        <div class="contact-info rv d3">
+          <div class="ci-row">
+            <div class="ci-icon">📱</div>
+            <div>
+              <div class="ci-label">Instagram</div>
+              <div class="ci-val"><a href="https://www.instagram.com/justfitness_2024/" target="_blank">@justfitness_2024</a></div>
+            </div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-icon">⏰</div>
+            <div>
+              <div class="ci-label">Hours</div>
+              <div class="ci-val">Mon–Sat 6AM–10PM · Sun 8AM–6PM</div>
+            </div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-icon">🎁</div>
+            <div>
+              <div class="ci-label">New Members</div>
+              <div class="ci-val">First session is always free</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-socials rv d4">
+          <a class="cs" href="https://www.instagram.com/justfitness_2024/" target="_blank" rel="noopener" title="Instagram">IG</a>
+          <a class="cs" href="#" title="WhatsApp">WA</a>
+          <a class="cs" href="#" title="Call">📞</a>
+        </div>
+      </div>
+
+      <!-- QUERY FORM -->
+      <div class="rv d1">
+        <div class="qform">
+          <div class="qform-title">Quick Query</div>
+          <div class="qform-sub">We'll get back to you within a few hours · Free trial for all new members</div>
+
+          <form id="queryForm" novalidate>
+            <div class="fg-row">
+              <div class="fg">
+                <label for="fn">Name *</label>
+                <input id="fn" type="text" name="name" placeholder="Your name" required/>
+              </div>
+              <div class="fg">
+                <label for="fp">Phone *</label>
+                <input id="fp" type="tel" name="phone" placeholder="+91 XXXXX XXXXX" required/>
+              </div>
+            </div>
+            <div class="fg">
+              <label for="fe">Email</label>
+              <input id="fe" type="email" name="email" placeholder="your@email.com"/>
+            </div>
+            <div class="fg">
+              <label for="fi">I'm Interested In *</label>
+              <select id="fi" name="interest" required>
+                <option value="" disabled selected>Choose a program…</option>
+                <option>Strength & Weight Training</option>
+                <option>HIIT & Cardio</option>
+                <option>Yoga & Stretching</option>
+                <option>Zumba & Dance</option>
+                <option>Personal Training</option>
+                <option>Weight Loss Program</option>
+                <option>General Membership</option>
+                <option>Something Else</option>
+              </select>
+            </div>
+            <div class="fg-row">
+              <div class="fg">
+                <label for="fg2">My Goal</label>
+                <select id="fg2" name="goal">
+                  <option value="" disabled selected>Select goal…</option>
+                  <option>Lose Weight</option>
+                  <option>Build Muscle</option>
+                  <option>Improve Fitness</option>
+                  <option>Get Flexible</option>
+                  <option>Stress Relief</option>
+                  <option>Sport Performance</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label for="fex">Experience Level</label>
+                <select id="fex" name="experience">
+                  <option value="" disabled selected>Select level…</option>
+                  <option>Complete Beginner</option>
+                  <option>Some Experience</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                </select>
+              </div>
+            </div>
+            <div class="fg">
+              <label for="fm">Message</label>
+              <textarea id="fm" name="message" placeholder="Anything else you'd like us to know — best time to call, specific questions, etc."></textarea>
+            </div>
+            <button type="submit" class="sub-btn" id="subBtn">
+              <span>Send Query</span> <span>→</span>
+            </button>
+            <div class="fmsg" id="formMsg"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="ft-brand">
+        <a class="logo" href="#">Just Fitness<div class="dot"></div></a>
+        <p>A no-nonsense gym built around real results. Strength, cardio, yoga, dance — everything you need, nothing you don't.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Programs</h4>
+        <ul>
+          <li>Strength & Weights</li>
+          <li>HIIT & Cardio</li>
+          <li>Yoga & Stretch</li>
+          <li>Zumba & Dance</li>
+          <li>Personal Training</li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Membership</h4>
+        <ul>
+          <li>Basic — ₹1,499/mo</li>
+          <li>Standard — ₹2,799/mo</li>
+          <li>Premium — ₹4,999/mo</li>
+          <li>Student Discount</li>
+          <li>Couple Plans</li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="https://www.instagram.com/justfitness_2024/" target="_blank" style="color:inherit;text-decoration:none">Instagram</a></li>
+          <li>Free Trial Session</li>
+          <li>WhatsApp Us</li>
+          <li><a href="#contact" style="color:inherit;text-decoration:none">Send a Query</a></li>
+          <li>Class Schedule</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Just Fitness. All rights reserved. Photos via Unsplash.</span>
+      <span>Follow us: <a href="https://www.instagram.com/justfitness_2024/" target="_blank">@justfitness_2024</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const cur = document.getElementById('cur');
+const curR = document.getElementById('cur-r');
+let mx=-200,my=-200,rx=-200,ry=-200;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function loop(){
+  rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+  curR.style.left=rx+'px'; curR.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a, button, .class-card, .trainer, .price-card, .tc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('on');curR.classList.add('on')});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('on');curR.classList.remove('on')});
+});
+
+/* ── NAV ── */
+window.addEventListener('scroll',()=>document.getElementById('mainnav').classList.toggle('sc',scrollY>50),{passive:true});
+
+/* ── REVEAL ── */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target)}});
+},{threshold:0.08});
+document.querySelectorAll('.rv,.class-card,.trainer,.price-card,.tc,.gi').forEach(el=>io.observe(el));
+
+/* ── SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+
+/* ── FORM ── */
+document.getElementById('queryForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('subBtn');
+  const msg = document.getElementById('formMsg');
+  const name = this.name.value.trim();
+  const phone = this.phone.value.trim();
+  const interest = this.interest.value;
+
+  if (!name || !phone || !interest) {
+    msg.textContent = '⚠ Please fill in your name, phone, and select a program.';
+    msg.className = 'fmsg err'; return;
+  }
+  if (phone.replace(/\D/g,'').length < 10) {
+    msg.textContent = '⚠ Please enter a valid phone number.';
+    msg.className = 'fmsg err'; return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span>Sending…</span>';
+  msg.className = 'fmsg';
+
+  /* Replace this with EmailJS or backend API call:
+     emailjs.send('SERVICE_ID','TEMPLATE_ID',{name,phone,...}).then(...) */
+  setTimeout(() => {
+    msg.innerHTML = `✅ <strong>Thanks, ${name.split(' ')[0]}!</strong> We've received your query about <strong>${interest}</strong>. We'll reach out on <strong>${phone}</strong> soon. See you at Just Fitness! 💪`;
+    msg.className = 'fmsg ok';
+    btn.disabled = false;
+    btn.innerHTML = '<span>✓ Query Sent!</span>';
+    btn.style.background = '#166534';
+    this.reset();
+  }, 1300);
+});
+</script>
+</body>
+</html>
